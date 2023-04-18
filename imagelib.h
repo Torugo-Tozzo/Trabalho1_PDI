@@ -16,7 +16,7 @@ enum
 #if defined(_WIN32) || defined(__WIN64__) || defined(__CYGWIN__)
 #define VIEW "./i_view32"
 #elif defined(__linux__)
-#define VIEW "eog"
+#define VIEW "sudo eog"
 #endif
 
 void errormsg(char *, ...);

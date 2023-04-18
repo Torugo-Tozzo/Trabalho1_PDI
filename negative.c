@@ -1,94 +1,80 @@
 /*=============================================================
-* UNIFAL = U ni v e r si d a d e F e d e r al de Al f e n a s .
-* BACHARELADO EM CIENCIA DA COMPUTACAO.
-* Trabalho . . : Imagem ASCII
-* D i s c i p l i n a : Processamento de Imagens
-* P r o f e s s o r . : Luiz Eduardo da S i l v a
-* Aluno . . . . . : Victor Hugo Tozzo Filho
-* Data . . . . . . : 23/04/2023
-*=============================================================*/
+ * UNIFAL = Universidade Federal de Alfenas .
+ * BACHARELADO EM CIENCIA DA COMPUTACAO.
+ * Trabalho   : Imagem ASCII
+ * Disciplina : Processamento de Imagens
+ * Professor  : Luiz Eduardo da Silva
+ * Aluno . . . . . : Victor Hugo Tozzo Filho
+ * Data . . . . . . : 23/04/2023
+ *=============================================================*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "imagelib.h"
 
-void neg_pbm(image In, image Out, int nl, int nc)
-{
-    for (int i = 0; i < nl * nc; i++)
-        Out[i] = !In[i];
-}
-
-void neg_pgm(image In, image Out, int nl, int nc, int mn)
-{
-    for (int i = 0; i < nl * nc; i++)
-        Out[i] = mn - In[i];
-}
-
-void subdivide_tonalities(image In, image Out, int nl, int nc)
-{
-    int tonalities = 6;
-    int tonality_range = 256 / tonalities;
-
-    for (int i = 0; i < nl * nc; i++)
-    {
-        int pixel = In[i];
-        int tonality = pixel / tonality_range;
-        int new_pixel = tonality * tonality_range;
-        Out[i] = new_pixel;
-    }
-}
-
-void neg_ppm(image In, image Out, int nl, int nc, int mn)
-{
-    for (int i = 0; i < nl * nc; i++)
-    {
-        int r = mn - (In[i] >> 16) & 0xFF;
-        int g = mn - (In[i] >> 8) & 0xFF;
-        int b = mn - In[i] & 0xFF;
-        Out[i] = (r << 16) + (g << 8) + b;
-    }
-}
-
 void msg(char *s)
 {
     printf("\nNegative image");
     printf("\n-------------------------------");
-    printf("\nUsage:  %s  image-name[.pnm] tp\n\n", s);
-    printf("    image-name[.pnm] is image file file \n");
-    printf("    tp = image type (1 = BW, 2 = Gray, 3 = Color)\n\n");
+    printf("\nUsage:  %s  image-name[.pgm] image-result.pgm n n\n\n", s);
+    printf("    image-name[.pgm] is image file file \n");
     exit(1);
+}
+
+void resize_pgm(image In, image Out, int nl_in, int nc_in, int nl_out, int nc_out)
+{
+    double ratio_nl = (double)nl_in / nl_out;
+    double ratio_nc = (double)nc_in / nc_out;
+
+    for (int i = 0; i < nl_out; i++)
+    {
+        for (int j = 0; j < nc_out; j++)
+        {
+            int orig_i = (int)(i * ratio_nl);
+            int orig_j = (int)(j * ratio_nc);
+
+            Out[i * nc_out + j] = In[orig_i * nc_in + orig_j];
+        }
+    }
+}
+
+void convert_to_gray(image In, int nl, int nc, int num_tons_cinza)
+{
+    double step = 255.0 / (num_tons_cinza - 1);
+
+    for (int i = 0; i < nl; i++)
+    {
+        for (int j = 0; j < nc; j++)
+        {
+            int index = i * nc + j;
+            int new_value = (int)((double)In[index] / step + 0.5) * step;
+            In[index] = new_value;
+        }
+    }
 }
 
 int main(int argc, char *argv[])
 {
-    int nc, nr, ml, tp;
+    int nc, nr, ml;
     char *p, nameIn[100], nameOut[100], cmd[110];
     image In, Out;
-    if (argc < 3)
+    if (argc < 6)
         msg(argv[0]);
-    tp = atoi(argv[2]);
     //-- define input/output file name
-    img_name(argv[1], nameIn, nameOut, tp);
+    img_name(argv[1], nameIn, nameOut, 2); // Assuming input image is PGM (grayscale)
     //-- read image
-    In = img_get(nameIn, &nr, &nc, &ml, tp);
-    //-- create output image
-    Out = img_alloc(nr, nc);
-    //-- transformation
-    switch (tp)
-    {
-    case 1:
-        neg_pbm(In, Out, nr, nc);
-        break;
-    case 2:
-        neg_pgm(In, Out, nr, nc, ml);
-        subdivide_tonalities(In, Out, nr, nc);
-        break;
-    case 3:
-        neg_ppm(In, Out, nr, nc, ml);
-    }
+    In = img_get(nameIn, &nr, &nc, &ml, 2);
+    //-- resize image
+    int nl_out = atoi(argv[3]); // número de linhas desejado
+    int nc_out = atoi(argv[4]); // número de colunas desejado
+    Out = img_alloc(nl_out, nc_out);
+    resize_pgm(In, Out, nr, nc, nl_out, nc_out);
+    //-- convert to grayscale
+    int num_tons_cinza = strlen(argv[5]); // número de tons de cinza desejado
+    convert_to_gray(Out, nl_out, nc_out, num_tons_cinza);
     //-- save image
-    img_put(Out, nameOut, nr, nc, ml, tp);
+    img_put(Out, nameOut, nl_out, nc_out, ml, 2);
     //-- show image
     sprintf(cmd, "%s %s &", VIEW, nameOut);
     system(cmd);
