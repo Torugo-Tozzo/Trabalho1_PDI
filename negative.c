@@ -1,8 +1,12 @@
-/*-------------------------------------------------------------------------
- * Image Processing using C-Ansi
- *   Program: Negative from grayscale image
- * By Luiz Eduardo da Silva.
- *-------------------------------------------------------------------------*/
+1 /*=============================================================
+2 * UNIFAL = U ni v e r si d a d e F e d e r al de Al f e n a s .
+3 * BACHARELADO EM CIENCIA DA COMPUTACAO.
+4 * Trabalho . . : Imagem ASCII
+5 * D i s c i p l i n a : Processamento de Imagens
+6 * P r o f e s s o r . : Luiz Eduardo da S i l v a
+7 * Aluno . . . . . : Victor Hugo Tozzo Filho
+8 * Data . . . . . . : 23/04/2023
+9 *=============================================================*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,9 +60,6 @@ void msg(char *s)
     exit(1);
 }
 
-/*-------------------------------------------------------------------------
- * main function
- *-------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
     int nc, nr, ml, tp;
