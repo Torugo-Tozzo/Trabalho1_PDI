@@ -1,12 +1,12 @@
-1 /*=============================================================
-2 * UNIFAL = U ni v e r si d a d e F e d e r al de Al f e n a s .
-3 * BACHARELADO EM CIENCIA DA COMPUTACAO.
-4 * Trabalho . . : Imagem ASCII
-5 * D i s c i p l i n a : Processamento de Imagens
-6 * P r o f e s s o r . : Luiz Eduardo da S i l v a
-7 * Aluno . . . . . : Victor Hugo Tozzo Filho
-8 * Data . . . . . . : 23/04/2023
-9 *=============================================================*/
+/*=============================================================
+* UNIFAL = U ni v e r si d a d e F e d e r al de Al f e n a s .
+* BACHARELADO EM CIENCIA DA COMPUTACAO.
+* Trabalho . . : Imagem ASCII
+* D i s c i p l i n a : Processamento de Imagens
+* P r o f e s s o r . : Luiz Eduardo da S i l v a
+* Aluno . . . . . : Victor Hugo Tozzo Filho
+* Data . . . . . . : 23/04/2023
+*=============================================================*/
 
 #include <stdio.h>
 #include <stdlib.h>
