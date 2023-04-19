@@ -19,3 +19,4 @@ $(TARGET): $(OBJECTS);\
 
 clean:;\
     rm -f *.o *-result.p*m $(TARGET);\
+    rm output_ascii.txt;\

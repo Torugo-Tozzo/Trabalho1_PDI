@@ -17,7 +17,7 @@ void msg(char *s)
 {
     printf("\nNegative image");
     printf("\n-------------------------------");
-    printf("\nUsage:  %s  image-name[.pgm] image-result.pgm n n\n\n", s);
+    printf("\nUsage:  %s  image-name[.pgm] image-result.pgm n n '<caracteres>'\n\n", s);
     printf("    image-name[.pgm] is image file file \n");
     exit(1);
 }
@@ -54,6 +54,33 @@ void convert_to_gray(image In, int nl, int nc, int num_tons_cinza)
     }
 }
 
+void generate_ascii(image In, int nr, int nc, int ml, char *ascii_string, char *output_file)
+{
+    FILE *fp = fopen(output_file, "w");
+    if (fp == NULL)
+    {
+        printf("Erro ao criar o arquivo de saída.\n");
+        exit(1);
+    }
+
+    int len = strlen(ascii_string);
+    int gray_range = 255 / len;
+
+    for (int i = 0; i < nr; i++)
+    {
+        for (int j = 0; j < nc; j++)
+        {
+            int pixel = In[i * nc + j];
+            int ascii_index = pixel / gray_range;
+            char ascii_char = ascii_string[ascii_index];
+            fputc(ascii_char, fp);
+        }
+        fputc('\n', fp);
+    }
+
+    fclose(fp);
+}
+
 int main(int argc, char *argv[])
 {
     int nc, nr, ml;
@@ -73,11 +100,14 @@ int main(int argc, char *argv[])
     //-- convert to grayscale
     int num_tons_cinza = strlen(argv[5]); // número de tons de cinza desejado
     convert_to_gray(Out, nl_out, nc_out, num_tons_cinza);
+    generate_ascii(Out, nl_out, nc_out, ml, argv[5], "output_ascii.txt");
     //-- save image
     img_put(Out, nameOut, nl_out, nc_out, ml, 2);
     //-- show image
-    sprintf(cmd, "%s %s &", VIEW, nameOut);
+    //sprintf(cmd, "%s %s &", VIEW, nameOut);
+    sprintf(cmd, "cat output_ascii.txt");
     system(cmd);
+    //free mem
     img_free(In);
     img_free(Out);
     return 0;
