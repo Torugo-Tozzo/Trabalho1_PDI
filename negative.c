@@ -5,7 +5,7 @@
  * Disciplina : Processamento de Imagens
  * Professor  : Luiz Eduardo da Silva
  * Aluno . . . . . : Victor Hugo Tozzo Filho
- * Data . . . . . . : 23/04/2023
+ * Data . . . . . . : 18/04/2023
  *=============================================================*/
 
 #include <stdio.h>
