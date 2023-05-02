@@ -17,7 +17,7 @@ void msg(char *s)
 {
     printf("\nNegative image");
     printf("\n-------------------------------");
-    printf("\nUsage:  %s  image-name[.pgm] image-result.pgm n n '<caracteres>'\n\n", s);
+    printf("\nUsage:  %s  image-name[.pgm] nlinha ncoluna '<caracteres>'\n\n", s);
     printf("    image-name[.pgm] is image file file \n");
     exit(1);
 }
@@ -48,7 +48,7 @@ void convert_to_gray(image In, int nl, int nc, int num_tons_cinza)
         for (int j = 0; j < nc; j++)
         {
             int index = i * nc + j;
-            int new_value = (int)((double)In[index] / step + 0.5) * step;
+            int new_value = (int)((double)In[index] / step ) * step;
             In[index] = new_value;
         }
     }
@@ -86,21 +86,21 @@ int main(int argc, char *argv[])
     int nc, nr, ml;
     char *p, nameIn[100], nameOut[100], cmd[110];
     image In, Out;
-    if (argc < 6)
+    if (argc < 5)
         msg(argv[0]);
     //-- define input/output file name
     img_name(argv[1], nameIn, nameOut, 2); // Assuming input image is PGM (grayscale)
     //-- read image
     In = img_get(nameIn, &nr, &nc, &ml, 2);
     //-- resize image
-    int nl_out = atoi(argv[3]); // número de linhas desejado
-    int nc_out = atoi(argv[4]); // número de colunas desejado
+    int nl_out = atoi(argv[2]); // número de linhas desejado
+    int nc_out = atoi(argv[3]); // número de colunas desejado
     Out = img_alloc(nl_out, nc_out);
     resize_pgm(In, Out, nr, nc, nl_out, nc_out);
     //-- convert to grayscale
-    int num_tons_cinza = strlen(argv[5]); // número de tons de cinza desejado
+    int num_tons_cinza = strlen(argv[4]); // número de tons de cinza desejado
     convert_to_gray(Out, nl_out, nc_out, num_tons_cinza);
-    generate_ascii(Out, nl_out, nc_out, ml, argv[5], "output_ascii.txt");
+    generate_ascii(Out, nl_out, nc_out, ml, argv[4], "output_ascii.txt");
     //-- save image
     img_put(Out, nameOut, nl_out, nc_out, ml, 2);
     //-- show image
