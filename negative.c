@@ -41,14 +41,14 @@ void resize_pgm(image In, image Out, int nl_in, int nc_in, int nl_out, int nc_ou
 
 void convert_to_gray(image In, int nl, int nc, int num_tons_cinza)
 {
-    double step = 255.0 / (num_tons_cinza - 1);
+    double step = 255.0 / (num_tons_cinza ); 
 
     for (int i = 0; i < nl; i++)
     {
         for (int j = 0; j < nc; j++)
         {
             int index = i * nc + j;
-            int new_value = (int)((double)In[index] / step ) * step;
+            int new_value = (int)((double)In[index] / step  ) * step;
             In[index] = new_value;
         }
     }
