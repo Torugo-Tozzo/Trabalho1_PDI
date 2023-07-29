@@ -11,3 +11,5 @@ $ make
 ```
 $ ./ascii cao.pgm 30 100 '.*%#'
 ```
+
+![Imagem do Projeto](./Ascii.png)
